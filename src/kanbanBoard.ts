@@ -1,11 +1,11 @@
-const loadKanbanBoard = () => {
+const loadKanbanBoard = (bootstrap) => {
     return `
     <html>
         <head>
-            
+            <link rel="stylesheet" href="${bootstrap}" />
         </head>
         <body>
-            <h1>Kanban Board</h1>
+            <h3>Kanban Board</h3>
         </body>
     </html>
     `;

@@ -55,8 +55,12 @@ export function activate(context: vscode.ExtensionContext) {
 				enableScripts: true
 			}
 		);
+		let bootstrapPath = vscode.Uri.file(
+			path.join(context.extensionPath,'src','css','bootstrap.min.css')
+		);
+		let bootstrap = panel.webview.asWebviewUri(bootstrapPath);
 		// Load the html page
-		panel.webview.html = KanbanBoard.loadKanbanBoard();
+		panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap);
 	
 
 	});
