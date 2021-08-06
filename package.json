@@ -10,14 +10,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:kanban-vscode.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "kanban-vscode.helloWorld",
-				"title": "Hello World"
+				"command": "kanban-vscode.main",
+				"title": "Kanban Board"
 			}
 		]
 	},
@@ -41,5 +41,8 @@
 		"mocha": "^8.4.0",
 		"typescript": "^4.3.2",
 		"vscode-test": "^1.5.2"
+	},
+	"dependencies": {
+		"fs": "0.0.1-security"
 	}
 }
