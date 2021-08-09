@@ -85,26 +85,26 @@ export function activate(context: vscode.ExtensionContext) {
 		});		
 		// In kanban board, for pull, for both variables, id can be obtained from from.el.id and children values is in from.el.children array from which, for each of the item, get the text from innerText property using from.el.children[i].innerText
 			
-		panel.webview.onDidReceiveMessage(
-			message => {
-				switch(message.command) {
-					case 'changes':
-						// fs.readFile(jsonPath,(err,data) => {
-						// 	if(err) {
-						// 		vscode.window.showErrorMessage("Error in Loading Kanban Board.");
-						// 		return;
-						// 	}
-						// 	data[message.id] = message.data;
-						// 	console.log("data : "+data);
-						// 	fs.writeFile(jsonPath,data,(err: any) => {
-						// 		if(err) {
-						// 			vscode.window.showErrorMessage("Something went Wrong!");
-						// 		}
-						// 	});
-						// })
-				}
-			}
-		)
+		// panel.webview.onDidReceiveMessage(
+		// 	message => {
+		// 		switch(message.command) {
+		// 			case 'changes':
+		// 				// fs.readFile(jsonPath,(err,data) => {
+		// 				// 	if(err) {
+		// 				// 		vscode.window.showErrorMessage("Error in Loading Kanban Board.");
+		// 				// 		return;
+		// 				// 	}
+		// 				// 	data[message.id] = message.data;
+		// 				// 	console.log("data : "+data);
+		// 				// 	fs.writeFile(jsonPath,data,(err: any) => {
+		// 				// 		if(err) {
+		// 				// 			vscode.window.showErrorMessage("Something went Wrong!");
+		// 				// 		}
+		// 				// 	});
+		// 				// })
+		// 		}
+		// 	}
+		// )
 
 	});
 

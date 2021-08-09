@@ -1,5 +1,7 @@
 const loadKanbanBoard = (bootstrap,data,sortablejs) => {
     data = JSON.parse(data);
+    // console.log(data);
+    console.log("Html called!");
     console.log(data);
     return `
     <html>
@@ -17,10 +19,10 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
             <div class="container">
                 <div class="row row-cols-4">
                     <div id="todo-container" class="panel col-3">
-                        ${displayData(data.toDo,"todo", "To Do")}
+                        ${displayData(data.todo,"todo", "To Do")}
                     </div>
                     <div id="in-progress-container" class="panel col-3">
-                        ${displayData(data.inProgress,"inprogress","In Progress")}
+                        ${displayData(data.inprogress,"inprogress","In Progress")}
                     </div>
                     <div id="testing-container" class="panel col-3">
                         ${displayData(data.testing,"testing", "Testing")}
