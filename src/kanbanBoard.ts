@@ -12,10 +12,22 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                 .ghost {
                     opacity: 0.4;
                 }
+                .header-container {
+                    margin-top: 10px;
+                    display: flex;
+                }
             </style>
         </head>
         <body>
-            <center><h3>Kanban Board</h3></center><hr />
+            <div class="header-container">
+                <div class="col-10">
+                    <center class="fs-2">Kanban Board</center>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-outline-success btn-lg">+</button>
+                </div>
+            </div>
+            <hr />
             <div class="container">
                 <div class="row row-cols-4">
                     <div id="todo-container" class="panel col-3">
