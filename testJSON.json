@@ -1,0 +1,16 @@
+{
+    "completed": [
+        "create project"
+    ],
+    "inprogress": [
+        "drag and drop",
+        "save json"
+    ],
+    "todo": [
+        "delete",
+        "add task"
+    ],
+    "testing": [
+        "unit testing"
+    ]
+}

@@ -31,7 +31,13 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		vscode.window.showInformationMessage("Kanban Board for "+vscode.workspace.name+" is opened!");
 
-		let data = `{\n\t"completed": [],\n\t"inProgress": [],\n\t"testing": [],\n\t"toDo": []\n}`;
+		// let data = `{\n\t"completed": [],\n\t"inProgress": [],\n\t"testing": [],\n\t"toDo": []\n}`;
+		let data = {
+			"completed": [],
+			"inprogress": [],	
+			"testing": [],
+			"todo": []
+		};
 		let folderPath = vscode.workspace.rootPath+"\\.vscode";
 		let jsonPath = folderPath+"\\kanban.json";
 
@@ -39,12 +45,13 @@ export function activate(context: vscode.ExtensionContext) {
 		if(!fs.existsSync(folderPath)) {
 			fs.mkdirSync(folderPath);
 		}
-
-		fs.writeFile(jsonPath,data,(err: any) => {
-			if(err) {
-				vscode.window.showErrorMessage("Something went Wrong!");
-			}
-		});
+		if(!fs.existsSync(jsonPath)) {
+			fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
+				if(err) {
+					vscode.window.showErrorMessage("Something went Wrong!");
+				}
+			});
+		}
 
 		//Load Kanban page
 		const panel = vscode.window.createWebviewPanel(
@@ -55,13 +62,49 @@ export function activate(context: vscode.ExtensionContext) {
 				enableScripts: true
 			}
 		);
+		// add bootstrap to html file
 		let bootstrapPath = vscode.Uri.file(
 			path.join(context.extensionPath,'src','css','bootstrap.min.css')
 		);
 		let bootstrap = panel.webview.asWebviewUri(bootstrapPath);
-		// Load the html page
-		panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap);
-	
+
+		//add sortablejs file
+		let sortablePath = vscode.Uri.file(
+			path.join(context.extensionPath,'src','js','Sortable.js')
+		);
+		let sortablejs = panel.webview.asWebviewUri(sortablePath);
+
+		let kanban = '';
+		fs.readFile(jsonPath,(err,data) => {
+			if(err) {
+				vscode.window.showErrorMessage("Error in loading kanban board.");
+				return;
+			}
+			// Load the html page
+			panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,data,sortablejs);
+		});		
+		// In kanban board, for pull, for both variables, id can be obtained from from.el.id and children values is in from.el.children array from which, for each of the item, get the text from innerText property using from.el.children[i].innerText
+			
+		panel.webview.onDidReceiveMessage(
+			message => {
+				switch(message.command) {
+					case 'changes':
+						// fs.readFile(jsonPath,(err,data) => {
+						// 	if(err) {
+						// 		vscode.window.showErrorMessage("Error in Loading Kanban Board.");
+						// 		return;
+						// 	}
+						// 	data[message.id] = message.data;
+						// 	console.log("data : "+data);
+						// 	fs.writeFile(jsonPath,data,(err: any) => {
+						// 		if(err) {
+						// 			vscode.window.showErrorMessage("Something went Wrong!");
+						// 		}
+						// 	});
+						// })
+				}
+			}
+		)
 
 	});
 
