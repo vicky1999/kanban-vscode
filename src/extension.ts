@@ -106,9 +106,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			// Load the html page
 			panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,data,sortablejs);
-		});		
-		// In kanban board, for pull, for both variables, id can be obtained from from.el.id and children values is in from.el.children array from which, for each of the item, get the text from innerText property using from.el.children[i].innerText
-			
+		});			
 		panel.webview.onDidReceiveMessage(
 			message => {
 				switch(message.command) {
@@ -118,12 +116,10 @@ export function activate(context: vscode.ExtensionContext) {
 								vscode.window.showErrorMessage("Error in Loading Kanban Board.");
 								return;
 							}
-							console.log("Message: ");
-							console.log(message.text.data);
+							
 							data=JSON.parse(data);
 							data[message.text.fromId] = message.text.from;
 							data[message.text.toId] = message.text.to;
-							console.log(data);
 							fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
 								if(err) {
 									vscode.window.showErrorMessage("Something went Wrong!");
