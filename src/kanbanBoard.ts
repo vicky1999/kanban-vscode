@@ -90,8 +90,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                                 to: toArr
                             }
                         })
-                        // console.log("To Arr: ");
-                        // console.log(toArr);
                     },
                     animation: 150,
                     ghostClass: 'ghost'
@@ -129,8 +127,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                                 to: toArr
                             }
                         })
-                        // console.log("To Arr: ");
-                        // console.log(toArr);
                     },
                     animation: 150,
                     ghostClass: 'ghost'
@@ -171,8 +167,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                                 to: toArr
                             }
                         })
-                        // console.log("To Arr: ");
-                        // console.log(toArr);
                     },
                     animation: 150,
                     ghostClass: 'ghost'
@@ -213,8 +207,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                                 to: toArr
                             }
                         })
-                        // console.log("To Arr: ");
-                        // console.log(toArr);
                     },
                     animation: 150,
                     ghostClass: 'ghost'
