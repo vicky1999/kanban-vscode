@@ -61,6 +61,38 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                             console.log("From "+from.el.id+" to "+to.el.id);
                         }
                     },
+                    onEnd: function(event) {
+                        console.log(event.to);
+                        console.log(event.from);
+                        let from = event.from;
+                        let to = event.to;
+                        let fromId = from.id;
+                        let toId = to.id;
+
+                        let fromChildren = from.childNodes;
+                        let toChildren = to.childNodes;
+
+                        let fromArr = [];
+                        let toArr = [];
+
+                        for(let i=1;i<fromChildren.length;i++) {
+                            fromArr.push({"name":fromChildren[i].innerText});
+                        }
+                        for(let i=1;i<toChildren.length;i++) {
+                            toArr.push({"name":toChildren[i].innerText});
+                        }
+                        vscode.postMessage({
+                            command: 'changes',
+                            text: {
+                                fromId: fromId,
+                                toId: toId,
+                                from: fromArr,
+                                to: toArr
+                            }
+                        })
+                        // console.log("To Arr: ");
+                        // console.log(toArr);
+                    },
                     animation: 150,
                     ghostClass: 'ghost'
                 })
