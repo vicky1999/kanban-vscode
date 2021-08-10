@@ -19,24 +19,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.window.showInformationMessage('Extension Started!');
 
-	// let items = ["todo","inprogress","testing","completed"];
-
-	// window.showInputBox({
-	// 	placeHolder: "Task Name",
-	// 	title: "Create Task"
-	// }).then((input) => {
-	// 	window.showQuickPick(items,{
-	// 		canPickMany: false,
-	// 		placeHolder: "Please select",
-	// 		title: "Task Status"
-	// 	}).then((value) => {
-	// 		// console.log(`Selected: ${value}`);
-	// 		// console.log(input);
-	// 		window.showInformationMessage(`Task Name: ${input}.  Task status: ${value}`);
-
-	// 	});
-	// });
-
 	let disposable = vscode.commands.registerCommand('kanban-vscode.main', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
@@ -121,7 +103,37 @@ export function activate(context: vscode.ExtensionContext) {
 						});
 						return;
 					case 'addTask':
-						console.log("Add Task Button Pressed!");
+						let items = ["todo","inprogress","testing","completed"];
+
+						window.showInputBox({
+							placeHolder: "Task Name",
+							title: "Create Task"
+						}).then((input) => {
+							window.showQuickPick(items,{
+								canPickMany: false,
+								placeHolder: "Please select",
+								title: "Task Status"
+							}).then((value) => {
+								// window.showInformationMessage(`Task Name: ${input}.  Task status: ${value}`);
+
+								fs.readFile(jsonPath,"utf8",(err,data) => {
+								if(err) {
+									vscode.window.showErrorMessage("Error in Loading Kanban Board.");
+									return;
+								}
+								
+								data = JSON.parse(data);
+								data[value].push({"name":input});
+								
+								fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
+									if(err) {
+										vscode.window.showErrorMessage("Something went Wrong!");
+									}
+									panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
+								});
+							});
+						});
+						return;
 				}
 			}
 		);
