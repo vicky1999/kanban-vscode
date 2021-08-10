@@ -1,8 +1,6 @@
 const loadKanbanBoard = (bootstrap,data,sortablejs) => {
     data = JSON.parse(data);
-    console.log(typeof data);
-    console.log("Html called!");
-    console.log(data);
+
     return `
     <html>
         <head>
@@ -50,7 +48,7 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
 
                 function addTask() {
                     vscode.postMessage({
-                        command: addTask
+                        command: 'addTask'
                     });
                 }
 
