@@ -4,6 +4,8 @@ import * as vscode from 'vscode';
 const fs = require('fs');
 const path = require('path');
 
+import { window } from 'vscode';
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -20,6 +22,28 @@ export function activate(context: vscode.ExtensionContext) {
 	// The commandId parameter must match the command field in package.json
 
 	vscode.window.showInformationMessage('Extension Started!');
+
+	// let items = ["todo","inprogress","testing","completed"];
+
+	// window.showInputBox({
+	// 	placeHolder: "Task Name",
+	// 	title: "Create Task"
+	// }).then((input) => {
+	// 	window.showQuickPick(items,{
+	// 		canPickMany: false,
+	// 		placeHolder: "Please select",
+	// 		title: "Task Status"
+	// 	}).then((value) => {
+	// 		// console.log(`Selected: ${value}`);
+	// 		// console.log(input);
+	// 		window.showInformationMessage(`Task Name: ${input}.  Task status: ${value}`);
+
+	// 	});
+	// });
+
+	
+	
+	
 	
 	let disposable = vscode.commands.registerCommand('kanban-vscode.main', () => {
 		// The code you place here will be executed every time your command is executed
@@ -75,7 +99,7 @@ export function activate(context: vscode.ExtensionContext) {
 		let sortablejs = panel.webview.asWebviewUri(sortablePath);
 
 		let kanban = '';
-		fs.readFile(jsonPath,(err,data) => {
+		fs.readFile(jsonPath,"utf8",(err,data) => {
 			if(err) {
 				vscode.window.showErrorMessage("Error in loading kanban board.");
 				return;
@@ -85,26 +109,31 @@ export function activate(context: vscode.ExtensionContext) {
 		});		
 		// In kanban board, for pull, for both variables, id can be obtained from from.el.id and children values is in from.el.children array from which, for each of the item, get the text from innerText property using from.el.children[i].innerText
 			
-		// panel.webview.onDidReceiveMessage(
-		// 	message => {
-		// 		switch(message.command) {
-		// 			case 'changes':
-		// 				// fs.readFile(jsonPath,(err,data) => {
-		// 				// 	if(err) {
-		// 				// 		vscode.window.showErrorMessage("Error in Loading Kanban Board.");
-		// 				// 		return;
-		// 				// 	}
-		// 				// 	data[message.id] = message.data;
-		// 				// 	console.log("data : "+data);
-		// 				// 	fs.writeFile(jsonPath,data,(err: any) => {
-		// 				// 		if(err) {
-		// 				// 			vscode.window.showErrorMessage("Something went Wrong!");
-		// 				// 		}
-		// 				// 	});
-		// 				// })
-		// 		}
-		// 	}
-		// )
+		panel.webview.onDidReceiveMessage(
+			message => {
+				switch(message.command) {
+					case 'changes':
+						fs.readFile(jsonPath,"utf8",(err,data) => {
+							if(err) {
+								vscode.window.showErrorMessage("Error in Loading Kanban Board.");
+								return;
+							}
+							console.log("Message: ");
+							console.log(message.text.data);
+							data=JSON.parse(data);
+							data[message.text.fromId] = message.text.from;
+							data[message.text.toId] = message.text.to;
+							console.log(data);
+							fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
+								if(err) {
+									vscode.window.showErrorMessage("Something went Wrong!");
+								}
+								panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
+							});
+						});
+				}
+			}
+		);
 
 	});
 

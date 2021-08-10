@@ -1,16 +1,16 @@
 {
     "completed": [
-        "create project"
+        {"name": "create project"}
     ],
     "inprogress": [
-        "drag and drop",
-        "save json"
+        {"name": "drag and drop"},
+        {"name": "save json"}
     ],
     "todo": [
-        "delete",
-        "add task"
+        {"name": "delete"},
+        {"name": "add task"}
     ],
     "testing": [
-        "unit testing"
+        {"name": "unit testing"}
     ]
 }

@@ -1,6 +1,6 @@
 const loadKanbanBoard = (bootstrap,data,sortablejs) => {
     data = JSON.parse(data);
-    // console.log(data);
+    console.log(typeof data);
     console.log("Html called!");
     console.log(data);
     return `
@@ -24,7 +24,7 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                     <center class="fs-2">Kanban Board</center>
                 </div>
                 <div class="col-2">
-                    <button type="button" class="btn btn-outline-success btn-lg">+</button>
+                    <button type="button" class="btn btn-outline-success btn-lg" onclick="addTask();">+</button>
                 </div>
             </div>
             <hr />
@@ -44,8 +44,16 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                     </div>
                 </div>
             </div>
+
             <script>
                 const vscode = acquireVsCodeApi();
+
+                function addTask() {
+                    vscode.postMessage({
+                        command: addTask
+                    });
+                }
+
                 Sortable.create(todo,{
                     group: {
                         name: "kanban",
@@ -75,19 +83,22 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         let toArr = [];
 
                         for(let i=1;i<fromChildren.length;i++) {
-                            fromArr.push(fromChildren[i].innerText);
+                            fromArr.push({"name":fromChildren[i].innerText});
                         }
                         for(let i=1;i<toChildren.length;i++) {
-                            toArr.push(toChildren[i].innerText);
+                            toArr.push({"name":toChildren[i].innerText});
                         }
                         vscode.postMessage({
                             command: 'changes',
                             text: {
-                                id: fromId,
-                                data: fromArr
+                                fromId: fromId,
+                                toId: toId,
+                                from: fromArr,
+                                to: toArr
                             }
                         })
-                        console.log(toArr);
+                        // console.log("To Arr: ");
+                        // console.log(toArr);
                     },
                     animation: 150,
                     ghostClass: 'ghost'
