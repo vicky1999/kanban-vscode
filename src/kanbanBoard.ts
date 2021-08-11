@@ -64,8 +64,8 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         }
                     },
                     onEnd: function(event) {
-                        console.log(event.to);
-                        console.log(event.from);
+                        // console.log(event.to);
+                        // console.log(event.from);
                         let from = event.from;
                         let to = event.to;
                         let fromId = from.id;
@@ -74,35 +74,47 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         let fromChildren = from.childNodes;
                         let toChildren = to.childNodes;
 
+                        // console.log(fromChildren);
+                        // console.log(toChildren);
+
                         let fromArr = [];
                         let toArr = [];
 
                         for(let i=1;i<fromChildren.length;i++) {
-                            fromArr.push({"name":fromChildren[i].innerText});
+                            if(fromChildren[i].innerText != undefined)
+                                fromArr.push({"name":fromChildren[i].innerText});
                         }
                         for(let i=1;i<toChildren.length;i++) {
-                            toArr.push({"name":toChildren[i].innerText});
+                            if(toChildren[i].innerText != undefined)
+                                toArr.push({"name":toChildren[i].innerText});
                         }
-                        vscode.postMessage({
-                            command: 'changes',
-                            text: {
-                                fromId: fromId,
-                                toId: toId,
-                                from: fromArr,
-                                to: toArr
-                            }
-                        })
+                        
+                        console.log(fromArr);
+                        console.log(toArr);
+
+                        // vscode.postMessage({
+                        //     command: 'changes',
+                        //     text: {
+                        //         fromId: fromId,
+                        //         toId: toId,
+                        //         from: fromArr,
+                        //         to: toArr
+                        //     }
+                        // })
                     },
                     animation: 150,
                     ghostClass: 'ghost'
                 })
                 Sortable.create(inprogress,{
                     group: {
-                        name: "kanban"        
+                        name: "kanban",
+                        pull: (to,from) => {
+                            console.log("From "+from.el.id+" to "+to.el.id);
+                        }       
                     },
                     onEnd: function(event) {
-                        console.log(event.to);
-                        console.log(event.from);
+                        // console.log(event.to);
+                        // console.log(event.from);
                         let from = event.from;
                         let to = event.to;
                         let fromId = from.id;
@@ -111,24 +123,33 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         let fromChildren = from.childNodes;
                         let toChildren = to.childNodes;
 
+                        console.log(fromChildren);
+                        console.log(toChildren);
+
                         let fromArr = [];
                         let toArr = [];
 
                         for(let i=1;i<fromChildren.length;i++) {
-                            fromArr.push({"name":fromChildren[i].innerText});
+                            if(fromChildren[i].innerText != undefined)
+                                fromArr.push({"name":fromChildren[i].innerText});
                         }
                         for(let i=1;i<toChildren.length;i++) {
-                            toArr.push({"name":toChildren[i].innerText});
+                            if(toChildren[i].innerText != undefined)
+                                toArr.push({"name":toChildren[i].innerText});
                         }
-                        vscode.postMessage({
-                            command: 'changes',
-                            text: {
-                                fromId: fromId,
-                                toId: toId,
-                                from: fromArr,
-                                to: toArr
-                            }
-                        })
+                        
+                        console.log(fromArr);
+                        console.log(toArr);
+
+                        // vscode.postMessage({
+                        //     command: 'changes',
+                        //     text: {
+                        //         fromId: fromId,
+                        //         toId: toId,
+                        //         from: fromArr,
+                        //         to: toArr
+                        //     }
+                        // })
                     },
                     animation: 150,
                     ghostClass: 'ghost'
@@ -141,8 +162,8 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         }                        
                     },
                     onEnd: function(event) {
-                        console.log(event.to);
-                        console.log(event.from);
+                        // console.log(event.to);
+                        // console.log(event.from);
                         let from = event.from;
                         let to = event.to;
                         let fromId = from.id;
@@ -151,24 +172,33 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         let fromChildren = from.childNodes;
                         let toChildren = to.childNodes;
 
+                        console.log(fromChildren);
+                        console.log(toChildren);
+
                         let fromArr = [];
                         let toArr = [];
 
                         for(let i=1;i<fromChildren.length;i++) {
-                            fromArr.push({"name":fromChildren[i].innerText});
+                            if(fromChildren[i].innerText != undefined)
+                                fromArr.push({"name":fromChildren[i].innerText});
                         }
                         for(let i=1;i<toChildren.length;i++) {
-                            toArr.push({"name":toChildren[i].innerText});
+                            if(toChildren[i].innerText != undefined)
+                                toArr.push({"name":toChildren[i].innerText});
                         }
-                        vscode.postMessage({
-                            command: 'changes',
-                            text: {
-                                fromId: fromId,
-                                toId: toId,
-                                from: fromArr,
-                                to: toArr
-                            }
-                        })
+                        
+                        console.log(fromArr);
+                        console.log(toArr);
+
+                        // vscode.postMessage({
+                        //     command: 'changes',
+                        //     text: {
+                        //         fromId: fromId,
+                        //         toId: toId,
+                        //         from: fromArr,
+                        //         to: toArr
+                        //     }
+                        // })
                     },
                     animation: 150,
                     ghostClass: 'ghost'
@@ -181,8 +211,8 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         }
                     },
                     onEnd: function(event) {
-                        console.log(event.to);
-                        console.log(event.from);
+                        // console.log(event.to);
+                        // console.log(event.from);
                         let from = event.from;
                         let to = event.to;
                         let fromId = from.id;
@@ -191,16 +221,24 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         let fromChildren = from.childNodes;
                         let toChildren = to.childNodes;
 
+                        console.log(fromChildren);
+                        console.log(toChildren);
+
                         let fromArr = [];
                         let toArr = [];
 
                         for(let i=1;i<fromChildren.length;i++) {
-                            fromArr.push({"name":fromChildren[i].innerText});
+                            if(fromChildren[i].innerText != undefined)
+                                fromArr.push({"name":fromChildren[i].innerText});
                         }
                         for(let i=1;i<toChildren.length;i++) {
-                            toArr.push({"name":toChildren[i].innerText});
+                            if(toChildren[i].innerText != undefined)
+                                toArr.push({"name":toChildren[i].innerText});
                         }
+                        
+                        console.log(fromArr);
                         console.log(toArr);
+
                         // vscode.postMessage({
                         //     command: 'changes',
                         //     text: {
@@ -232,11 +270,11 @@ const displayData = (data,key,name) => {
         res+=`
         <li class="list-group-item">
             ${data[i].name}
-            <button type="button" class="btn btn-outline-danger" onclick="deleteTask();" style="float: right;">
+            <!-- <button type="button" class="btn btn-outline-danger" onclick="deleteTask();" style="float: right;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                 </svg>
-            </button>
+            </button> -->
         </li>`;
     }
     res+=`</ul></div>`;
