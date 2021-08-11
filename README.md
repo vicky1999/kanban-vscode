@@ -2,7 +2,7 @@
 
 A simple Kanban Board for Visual Studio Code.
 
-![Preview](Recording.mp4)
+![Preview](recording.gif)
 
 ## Features
 
