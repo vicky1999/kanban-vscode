@@ -92,15 +92,15 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         console.log(fromArr);
                         console.log(toArr);
 
-                        // vscode.postMessage({
-                        //     command: 'changes',
-                        //     text: {
-                        //         fromId: fromId,
-                        //         toId: toId,
-                        //         from: fromArr,
-                        //         to: toArr
-                        //     }
-                        // })
+                        vscode.postMessage({
+                            command: 'changes',
+                            text: {
+                                fromId: fromId,
+                                toId: toId,
+                                from: fromArr,
+                                to: toArr
+                            }
+                        })
                     },
                     animation: 150,
                     ghostClass: 'ghost'
@@ -141,15 +141,15 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         console.log(fromArr);
                         console.log(toArr);
 
-                        // vscode.postMessage({
-                        //     command: 'changes',
-                        //     text: {
-                        //         fromId: fromId,
-                        //         toId: toId,
-                        //         from: fromArr,
-                        //         to: toArr
-                        //     }
-                        // })
+                        vscode.postMessage({
+                            command: 'changes',
+                            text: {
+                                fromId: fromId,
+                                toId: toId,
+                                from: fromArr,
+                                to: toArr
+                            }
+                        })
                     },
                     animation: 150,
                     ghostClass: 'ghost'
@@ -190,15 +190,15 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         console.log(fromArr);
                         console.log(toArr);
 
-                        // vscode.postMessage({
-                        //     command: 'changes',
-                        //     text: {
-                        //         fromId: fromId,
-                        //         toId: toId,
-                        //         from: fromArr,
-                        //         to: toArr
-                        //     }
-                        // })
+                        vscode.postMessage({
+                            command: 'changes',
+                            text: {
+                                fromId: fromId,
+                                toId: toId,
+                                from: fromArr,
+                                to: toArr
+                            }
+                        })
                     },
                     animation: 150,
                     ghostClass: 'ghost'
@@ -239,15 +239,15 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         console.log(fromArr);
                         console.log(toArr);
 
-                        // vscode.postMessage({
-                        //     command: 'changes',
-                        //     text: {
-                        //         fromId: fromId,
-                        //         toId: toId,
-                        //         from: fromArr,
-                        //         to: toArr
-                        //     }
-                        // })
+                        vscode.postMessage({
+                            command: 'changes',
+                            text: {
+                                fromId: fromId,
+                                toId: toId,
+                                from: fromArr,
+                                to: toArr
+                            }
+                        })
                     },
                     animation: 150,
                     ghostClass: 'ghost'
