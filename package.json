@@ -3,6 +3,7 @@
 	"displayName": "kanban-vscode",
 	"description": "Kanban Board for Visual Studio Code",
 	"version": "0.0.1",
+	"publisher": "VigneshRavindran",
 	"engines": {
 		"vscode": "^1.59.0"
 	},

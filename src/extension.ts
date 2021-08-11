@@ -11,7 +11,7 @@ import { window } from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
 
 	// Load KanbanBoard file
-	const KanbanBoard = require(context.extensionPath+"\\src\\kanbanBoard.ts");
+	const KanbanBoard = require(context.extensionPath+"\\src\\kanbanBoard.js");
 	
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
@@ -73,7 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
 		let sortablejs = panel.webview.asWebviewUri(sortablePath);
 
 		let kanban = '';
-		fs.readFile(jsonPath,"utf8",(err,data) => {
+		fs.readFile(jsonPath,"utf8",(err:any,data:any) => {
 			if(err) {
 				vscode.window.showErrorMessage("Error in loading kanban board.");
 				return;
@@ -85,7 +85,7 @@ export function activate(context: vscode.ExtensionContext) {
 			message => {
 				switch(message.command) {
 					case 'changes':
-						fs.readFile(jsonPath,"utf8",(err,data) => {
+						fs.readFile(jsonPath,"utf8",(err:any,data:any) => {
 							if(err) {
 								vscode.window.showErrorMessage("Error in Loading Kanban Board.");
 								return;
@@ -116,14 +116,14 @@ export function activate(context: vscode.ExtensionContext) {
 							}).then((value) => {
 								// window.showInformationMessage(`Task Name: ${input}.  Task status: ${value}`);
 
-								fs.readFile(jsonPath,"utf8",(err,data) => {
+								fs.readFile(jsonPath,"utf8",(err:any,data:any) => {
 									if(err) {
 										vscode.window.showErrorMessage("Error in Loading Kanban Board.");
 										return;
 									}
-									
+									let val:string = value || '';
 									data = JSON.parse(data);
-									data[value].push({"name":input});
+									data[val].push({"name":input});
 									
 									fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
 										if(err) {
@@ -133,9 +133,10 @@ export function activate(context: vscode.ExtensionContext) {
 									});
 								});
 							});
-							return;
+						}	
+					);				
 					case 'delete':
-						fs.readFile(jsonPath,"utf8",(err,data) => {
+						fs.readFile(jsonPath,"utf8",(err:any,data:any) => {
 							if(err) {
 								vscode.window.showErrorMessage("Can't delete.  Please try again");
 								return;
@@ -151,11 +152,10 @@ export function activate(context: vscode.ExtensionContext) {
 								panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
 							});
 						})
-
+						return;
+						
 				}
-			}
-		);
-
+		});
 	});
 
 	context.subscriptions.push(disposable);
