@@ -117,23 +117,41 @@ export function activate(context: vscode.ExtensionContext) {
 								// window.showInformationMessage(`Task Name: ${input}.  Task status: ${value}`);
 
 								fs.readFile(jsonPath,"utf8",(err,data) => {
-								if(err) {
-									vscode.window.showErrorMessage("Error in Loading Kanban Board.");
-									return;
-								}
-								
-								data = JSON.parse(data);
-								data[value].push({"name":input});
-								
-								fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
 									if(err) {
-										vscode.window.showErrorMessage("Something went Wrong!");
+										vscode.window.showErrorMessage("Error in Loading Kanban Board.");
+										return;
 									}
-									panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
+									
+									data = JSON.parse(data);
+									data[value].push({"name":input});
+									
+									fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
+										if(err) {
+											vscode.window.showErrorMessage("Something went Wrong!");
+										}
+										panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
+									});
 								});
 							});
-						});
-						return;
+							return;
+					case 'delete':
+						fs.readFile(jsonPath,"utf8",(err,data) => {
+							if(err) {
+								vscode.window.showErrorMessage("Can't delete.  Please try again");
+								return;
+							}
+							data = JSON.parse(data);
+							let ind = data[message.text.key].indexOf(message.text.name);
+							data[message.text.key].splice(ind,1);
+							console.log(data);
+							fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
+								if(err) {
+									vscode.window.showErrorMessage("Something went Wrong!");
+								}
+								panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
+							});
+						})
+
 				}
 			}
 		);
