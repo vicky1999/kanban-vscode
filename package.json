@@ -2,7 +2,7 @@
 	"name": "kanban-vscode",
 	"displayName": "kanban-vscode",
 	"description": "Kanban Board for Visual Studio Code",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"publisher": "VigneshRavindran",
 	"engines": {
 		"vscode": "^1.59.0"
@@ -41,6 +41,7 @@
         "url": "https://github.com/vicky1999/kanban-vscode/issues"
     },
     "readmeFilename": "README.md",
+	"icon": "icon.png",
 	"devDependencies": {
 		"@types/vscode": "^1.59.0",
 		"@types/glob": "^7.1.3",

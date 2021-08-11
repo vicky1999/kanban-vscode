@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "kanban-vscode" is now active!');
 
-	vscode.window.showInformationMessage('Extension Started!');
+	// vscode.window.showInformationMessage('Extension Started!');
 
 	let disposable = vscode.commands.registerCommand('kanban-vscode.main', () => {
 		// The code you place here will be executed every time your command is executed
@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showErrorMessage("No Workspace selected!");
 			return;
 		}
-		vscode.window.showInformationMessage("Kanban Board for "+vscode.workspace.name+" is opened!");
+		// vscode.window.showInformationMessage("Kanban Board for "+vscode.workspace.name+" is opened!");
 
 		// let data = `{\n\t"completed": [],\n\t"inProgress": [],\n\t"testing": [],\n\t"toDo": []\n}`;
 		let data = {
