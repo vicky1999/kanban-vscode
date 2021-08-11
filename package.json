@@ -30,6 +30,17 @@
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js"
 	},
+    "author": {
+        "name": "Vignesh Ravindran"
+    },
+	"repository": {
+        "type": "git",
+        "url": "https://github.com/vicky1999/kanban-vscode"
+    },
+	"bugs": {
+        "url": "https://github.com/vicky1999/kanban-vscode/issues"
+    },
+    "readmeFilename": "README.md",
 	"devDependencies": {
 		"@types/vscode": "^1.59.0",
 		"@types/glob": "^7.1.3",
