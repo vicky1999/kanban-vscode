@@ -2,6 +2,8 @@
 
 A simple Kanban Board for Visual Studio Code.
 
+![Preview](recording.gif)
+
 ## Features
 
 * Create task

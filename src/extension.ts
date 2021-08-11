@@ -6,6 +6,25 @@ const path = require('path');
 
 import { window } from 'vscode';
 
+const getIndex = async (arr:any,val:string) => {
+	console.log("Inside method");
+	console.log(arr);
+	console.log(arr.length);
+	console.log(val);
+	let ind=-1;
+	for(let i=0;i<arr.length;i++) {
+		console.log("Loop");
+		console.log(arr[i]);
+		console.log(" - "+val);
+		if(arr[i].name === val) {
+			ind = await i;
+			break;
+		}
+	}
+	console.log("End");
+	return ind;
+};
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -136,13 +155,15 @@ export function activate(context: vscode.ExtensionContext) {
 						}	
 					);				
 					case 'delete':
-						fs.readFile(jsonPath,"utf8",(err:any,data:any) => {
+						fs.readFile(jsonPath,"utf8",async (err:any,data:any) => {
 							if(err) {
 								vscode.window.showErrorMessage("Can't delete.  Please try again");
 								return;
 							}
 							data = JSON.parse(data);
-							let ind = data[message.text.key].indexOf(message.text.name);
+							console.log(data[message.text.key]);
+							let ind = await getIndex(data[message.text.key],message.text.name);
+							console.log(ind);
 							data[message.text.key].splice(ind,1);
 							console.log(data);
 							fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
@@ -151,7 +172,7 @@ export function activate(context: vscode.ExtensionContext) {
 								}
 								panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
 							});
-						})
+						});
 						return;
 						
 				}
