@@ -7,21 +7,13 @@ const path = require('path');
 import { window } from 'vscode';
 
 const getIndex = async (arr:any,val:string) => {
-	console.log("Inside method");
-	console.log(arr);
-	console.log(arr.length);
-	console.log(val);
 	let ind=-1;
 	for(let i=0;i<arr.length;i++) {
-		console.log("Loop");
-		console.log(arr[i]);
-		console.log(" - "+val);
 		if(arr[i].name === val) {
 			ind = await i;
 			break;
 		}
 	}
-	console.log("End");
 	return ind;
 };
 
@@ -34,11 +26,11 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "kanban-vscode" is now active!');
+	// console.log('Congratulations, your extension "kanban-vscode" is now active!');
 
 	// vscode.window.showInformationMessage('Extension Started!');
 
-	let disposable = vscode.commands.registerCommand('kanban-vscode.main', () => {
+	let disposable = vscode.commands.registerCommand('kanbanboard.kanban', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		
@@ -161,11 +153,11 @@ export function activate(context: vscode.ExtensionContext) {
 								return;
 							}
 							data = JSON.parse(data);
-							console.log(data[message.text.key]);
+							// console.log(data[message.text.key]);
 							let ind = await getIndex(data[message.text.key],message.text.name);
-							console.log(ind);
+							// console.log(ind);
 							data[message.text.key].splice(ind,1);
-							console.log(data);
+							// console.log(data);
 							fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
 								if(err) {
 									vscode.window.showErrorMessage("Something went Wrong!");
