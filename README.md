@@ -1,5 +1,11 @@
 # kanban board
 
+![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/vicky1999.kanbanboard?color=green&label=vscode%20Marketplace)
+![GitHub](https://img.shields.io/github/license/vicky1999/kanban-vscode?color=green&label=License)
+![GitHub issues](https://img.shields.io/github/issues-raw/vicky1999/kanban-vscode?color=red)
+![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/vicky1999.kanbanboard?color=blue)
+[![Open Source Helpers](https://www.codetriage.com/vicky1999/kanban-vscode/badges/users.svg)](https://www.codetriage.com/vicky1999/kanban-vscode)
+
 A simple Kanban Board for Visual Studio Code.
 
 ![Preview](recording.gif)
