@@ -153,11 +153,10 @@ export function activate(context: vscode.ExtensionContext) {
 								return;
 							}
 							data = JSON.parse(data);
-							// console.log(data[message.text.key]);
 							let ind = await getIndex(data[message.text.key],message.text.name);
-							// console.log(ind);
+
 							data[message.text.key].splice(ind,1);
-							// console.log(data);
+
 							fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
 								if(err) {
 									vscode.window.showErrorMessage("Something went Wrong!");
