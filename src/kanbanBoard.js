@@ -53,7 +53,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                 }
 
                 function deleteTask(name,key) {
-                    console.log("Delete Task: "+name+" in "+key);
                     vscode.postMessage({
                         command: 'delete',
                         text: {
@@ -81,9 +80,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         let fromChildren = from.childNodes;
                         let toChildren = to.childNodes;
 
-                        // console.log(fromChildren);
-                        // console.log(toChildren);
-
                         let fromArr = [];
                         let toArr = [];
 
@@ -96,8 +92,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                                 toArr.push({"name":toChildren[i].innerText});
                         }
                         
-                        console.log(fromArr);
-                        console.log(toArr);
 
                         vscode.postMessage({
                             command: 'changes',
@@ -144,10 +138,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                             if(toChildren[i].innerText != undefined)
                                 toArr.push({"name":toChildren[i].innerText});
                         }
-                        
-                        console.log(fromArr);
-                        console.log(toArr);
-
                         vscode.postMessage({
                             command: 'changes',
                             text: {
@@ -179,9 +169,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         let fromChildren = from.childNodes;
                         let toChildren = to.childNodes;
 
-                        console.log(fromChildren);
-                        console.log(toChildren);
-
                         let fromArr = [];
                         let toArr = [];
 
@@ -193,9 +180,7 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                             if(toChildren[i].innerText != undefined)
                                 toArr.push({"name":toChildren[i].innerText});
                         }
-                        
-                        console.log(fromArr);
-                        console.log(toArr);
+
 
                         vscode.postMessage({
                             command: 'changes',
@@ -228,9 +213,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         let fromChildren = from.childNodes;
                         let toChildren = to.childNodes;
 
-                        console.log(fromChildren);
-                        console.log(toChildren);
-
                         let fromArr = [];
                         let toArr = [];
 
@@ -242,9 +224,6 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                             if(toChildren[i].innerText != undefined)
                                 toArr.push({"name":toChildren[i].innerText});
                         }
-                        
-                        console.log(fromArr);
-                        console.log(toArr);
 
                         vscode.postMessage({
                             command: 'changes',
