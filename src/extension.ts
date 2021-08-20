@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 			fs.mkdirSync(folderPath);
 		}
 		if(!fs.existsSync(jsonPath)) {
-			fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
+			fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {
 				if(err) {
 					vscode.window.showErrorMessage("Something went Wrong!");
 				}
@@ -105,11 +105,11 @@ export function activate(context: vscode.ExtensionContext) {
 							data=JSON.parse(data);
 							data[message.text.fromId] = message.text.from;
 							data[message.text.toId] = message.text.to;
-							fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
+							fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {
 								if(err) {
 									vscode.window.showErrorMessage("Something went Wrong!");
 								}
-								panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
+								panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data,undefined,4),sortablejs);
 							});
 						});
 						return;
@@ -136,11 +136,11 @@ export function activate(context: vscode.ExtensionContext) {
 									data = JSON.parse(data);
 									data[val].push({"name":input});
 									
-									fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
+									fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {
 										if(err) {
 											vscode.window.showErrorMessage("Something went Wrong!");
 										}
-										panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
+										panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data,undefined,4),sortablejs);
 									});
 								});
 							});
@@ -157,11 +157,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 							data[message.text.key].splice(ind,1);
 
-							fs.writeFile(jsonPath,JSON.stringify(data),(err: any) => {
+							fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {
 								if(err) {
 									vscode.window.showErrorMessage("Something went Wrong!");
 								}
-								panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data),sortablejs);
+								panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data,undefined,4),sortablejs);
 							});
 						});
 						return;
