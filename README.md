@@ -23,3 +23,9 @@ The extension will automatically create the kanban board when you use.  Just pre
 ## Contributions
 
 Contibutions to the project was most welcome.  Please read `CONTRIBUTING.md` to know more on contributing to the project.
+
+## Contributors
+
+<a href="https://github.com/vicky1999/kanban-vscode/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=vicky1999/kanban-vscode" />
+</a>
