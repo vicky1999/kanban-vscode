@@ -1,4 +1,4 @@
-# kanban board
+# Kanban Board
 
 ![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/vicky1999.kanbanboard?color=green&label=vscode%20Marketplace)
 ![GitHub](https://img.shields.io/github/license/vicky1999/kanban-vscode?color=green&label=License)
