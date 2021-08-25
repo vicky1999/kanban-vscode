@@ -120,27 +120,32 @@ export function activate(context: vscode.ExtensionContext) {
 							placeHolder: "Task Name",
 							title: "Create Task"
 						}).then((input) => {
-							window.showQuickPick(items,{
-								canPickMany: false,
-								placeHolder: "Please select",
-								title: "Task Status"
-							}).then((value) => {
-								// window.showInformationMessage(`Task Name: ${input}.  Task status: ${value}`);
+							window.showInputBox({
+								placeHolder: "Task Description",
+								title: "Create Task"
+							}).then((desc) => {
+								window.showQuickPick(items,{
+									canPickMany: false,
+									placeHolder: "Please select",
+									title: "Task Status"
+								}).then((value) => {
+									// window.showInformationMessage(`Task Name: ${input}.  Task status: ${value}`);
 
-								fs.readFile(jsonPath,"utf8",(err:any,data:any) => {
-									if(err) {
-										vscode.window.showErrorMessage("Error in Loading Kanban Board.");
-										return;
-									}
-									let val:string = value || '';
-									data = JSON.parse(data);
-									data[val].push({"name":input});
-									
-									fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {
+									fs.readFile(jsonPath,"utf8",(err:any,data:any) => {
 										if(err) {
-											vscode.window.showErrorMessage("Something went Wrong!");
+											vscode.window.showErrorMessage("Error in Loading Kanban Board.");
+											return;
 										}
-										panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data,undefined,4),sortablejs);
+										let val:string = value || '';
+										data = JSON.parse(data);
+										data[val].push({"name":input, "description": desc});
+										
+										fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {
+											if(err) {
+												vscode.window.showErrorMessage("Something went Wrong!");
+											}
+											panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data,undefined,4),sortablejs);
+										});
 									});
 								});
 							});
