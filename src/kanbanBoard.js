@@ -254,7 +254,7 @@ const displayData = (data,key,name) => {
             `;
     for(let i=0;i<data.length;i++) {
         res+=`
-        <li class="list-group-item d-flex justify-content-between align-items-center">
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="cursor: pointer;">
             ${data[i].name}
             
             <button type="button" class="btn btn-outline-danger" onclick="deleteTask('${data[i].name}','${key}');" style="float: right;">
