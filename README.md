@@ -18,7 +18,7 @@ A Kanban Board extension for Visual Studio Code.
 
 ## Using the Extension
 
-The extension will automatically create the kanban board when you use.  Just press `ctrl+shift+P` and then type `Kanban Board` and press `Enter` to open the Kanban Board in Visual Studio code.
+The extension will automatically create the kanban board when you use.  Just press `CTRL+SHIFT+P` and then type `Kanban Board` and press `Enter` to open the Kanban Board in Visual Studio code.
 
 ## Contributions
 
