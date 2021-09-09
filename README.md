@@ -6,7 +6,7 @@
 ![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/vicky1999.kanbanboard?color=blue)
 [![Open Source Helpers](https://www.codetriage.com/vicky1999/kanban-vscode/badges/users.svg)](https://www.codetriage.com/vicky1999/kanban-vscode)
 
-A Kanban Board extension for Visual Studio Code.
+Kanban Board extension for Visual Studio Code.
 
 ![Preview](recording.gif)
 
