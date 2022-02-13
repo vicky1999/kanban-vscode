@@ -266,8 +266,8 @@ const displayData = (data,key,name) => {
     for(let i=0;i<data.length;i++) {
         res+=`
         <li class="list-group-item d-flex justify-content-between align-items-center" style="cursor: pointer;">
-            <div onclick='dataClicked(${JSON.stringify(data[i])}, "${name}");'>
-                ${data[i].name}
+            <div>
+                <div onclick='dataClicked(${JSON.stringify(data[i])}, "${name}");'>${data[i].name}</div>
             <div>
             <button type="button" class="btn btn-outline-danger" onclick="deleteTask('${data[i].name}','${key}');" style="float: right;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">

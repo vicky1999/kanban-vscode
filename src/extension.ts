@@ -61,6 +61,8 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 		}
 
+		let items = ["todo","inprogress","testing","completed"];
+
 		//Load Kanban page
 		const panel = vscode.window.createWebviewPanel(
 			'kanbanBoard',
@@ -113,8 +115,6 @@ export function activate(context: vscode.ExtensionContext) {
 						});
 						return;
 					case 'addTask':
-						let items = ["todo","inprogress","testing","completed"];
-
 						window.showInputBox({
 							placeHolder: "Task Name",
 							title: "Create Task"
@@ -151,6 +151,7 @@ export function activate(context: vscode.ExtensionContext) {
 						}	
 					);				
 					case 'delete':
+						console.log('Delete api event Click!');
 						fs.readFile(jsonPath,"utf8",async (err:any,data:any) => {
 							if(err) {
 								vscode.window.showErrorMessage("Can't delete.  Please try again");
@@ -171,6 +172,7 @@ export function activate(context: vscode.ExtensionContext) {
 						return;
 
 					case 'edit':
+						console.log('Edit api event Click!');
 						window.showInputBox({
 							placeHolder: "Task Name",
 							title: "Edit Task",
