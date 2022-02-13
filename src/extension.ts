@@ -137,6 +137,12 @@ export function activate(context: vscode.ExtensionContext) {
 										}
 										let val:string = value || '';
 										data = JSON.parse(data);
+										for(let i=0;i<items.length;i++) {
+											if(data[items[i]].findIndex(d => d.name === input) > -1) {
+												vscode.window.showErrorMessage("Task Already exist.  Please create a task with different name");
+												return;
+											}
+										}
 										data[val].push({"name":input, "description": desc});
 										
 										fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {
@@ -196,6 +202,11 @@ export function activate(context: vscode.ExtensionContext) {
 										}
 										let val:string = value || '';
 										data = JSON.parse(data);
+										let key = message.text.status.replace(" ", '').toLowerCase();
+										let ind = data[key].findIndex(d => d.name === message.text.name);
+										if(ind > -1) {
+											data[key].splice(ind, 1);
+										}
 										data[val].push({"name":input, "description": desc});
 										
 										fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {

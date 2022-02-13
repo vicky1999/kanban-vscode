@@ -68,7 +68,8 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                         command: 'edit',
                         text: {
                             name: data.name,
-                            description: data.description
+                            description: data.description,
+                            status: status
                         }
                     })
                 }
