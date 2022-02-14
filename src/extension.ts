@@ -22,8 +22,7 @@ const getIndex = async (arr:any,val:string) => {
 export function activate(context: vscode.ExtensionContext) {
 
 	// Load KanbanBoard file
-	const KanbanBoard = require(context.extensionPath+"\\src\\kanbanBoard.js");
-	
+	const KanbanBoard = require(context.extensionPath+"/src/kanbanBoard.js");	
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	// console.log('Congratulations, your extension "kanban-vscode" is now active!');
@@ -61,6 +60,8 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			});
 		}
+
+		let items = ["todo","inprogress","testing","completed"];
 
 		//Load Kanban page
 		const panel = vscode.window.createWebviewPanel(
@@ -114,8 +115,6 @@ export function activate(context: vscode.ExtensionContext) {
 						});
 						return;
 					case 'addTask':
-						let items = ["todo","inprogress","testing","completed"];
-
 						window.showInputBox({
 							placeHolder: "Task Name",
 							title: "Create Task"
@@ -138,6 +137,12 @@ export function activate(context: vscode.ExtensionContext) {
 										}
 										let val:string = value || '';
 										data = JSON.parse(data);
+										for(let i=0;i<items.length;i++) {
+											if(data[items[i]].findIndex(d => d.name === input) > -1) {
+												vscode.window.showErrorMessage("Task Already exist.  Please create a task with different name");
+												return;
+											}
+										}
 										data[val].push({"name":input, "description": desc});
 										
 										fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {
@@ -152,6 +157,7 @@ export function activate(context: vscode.ExtensionContext) {
 						}	
 					);				
 					case 'delete':
+						console.log('Delete api event Click!');
 						fs.readFile(jsonPath,"utf8",async (err:any,data:any) => {
 							if(err) {
 								vscode.window.showErrorMessage("Can't delete.  Please try again");
@@ -170,6 +176,50 @@ export function activate(context: vscode.ExtensionContext) {
 							});
 						});
 						return;
+
+					case 'edit':
+						console.log('Edit api event Click!');
+						window.showInputBox({
+							placeHolder: "Task Name",
+							title: "Edit Task",
+							value: message.text.name
+						}).then((input) => {
+							window.showInputBox({
+								placeHolder: "Task Description",
+								title: "Edit Task",
+								value: message.text.description
+							}).then((desc) => {
+								window.showQuickPick(items,{
+									canPickMany: false,
+									placeHolder: "Please select",
+									title: "Task Status"
+								}).then((value) => {
+									// window.showInformationMessage(`Task Name: ${input}.  Task status: ${value}`);
+									fs.readFile(jsonPath,"utf8",(err:any,data:any) => {
+										if(err) {
+											vscode.window.showErrorMessage("Error in Loading Kanban Board.");
+											return;
+										}
+										let val:string = value || '';
+										data = JSON.parse(data);
+										let key = message.text.status.replace(" ", '').toLowerCase();
+										let ind = data[key].findIndex(d => d.name === message.text.name);
+										if(ind > -1) {
+											data[key].splice(ind, 1);
+										}
+										data[val].push({"name":input, "description": desc});
+										
+										fs.writeFile(jsonPath,JSON.stringify(data,undefined,4),(err: any) => {
+											if(err) {
+												vscode.window.showErrorMessage("Something went Wrong!");
+											}
+											panel.webview.html = KanbanBoard.loadKanbanBoard(bootstrap,JSON.stringify(data,undefined,4),sortablejs);
+										});
+									});
+								});
+							});
+						}	
+					);
 						
 				}
 		});
