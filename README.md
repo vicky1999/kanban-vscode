@@ -15,6 +15,7 @@ Kanban Board extension for Visual Studio Code.
 * Create task
 * drag and drop (change status of the task)
 * delete task
+* Edit task
 
 ## Using the Extension
 
