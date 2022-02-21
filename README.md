@@ -23,7 +23,7 @@ The extension will automatically create the kanban board when you use.  Press `C
 
 ## Contributions
 
-Contibutions to the project was most welcome.  Please read `CONTRIBUTING.md` to know more on contributing to the project.
+Contibutions to this project was most welcome.  Please read `CONTRIBUTING.md` to know more on contributing to the project.
 
 ## Contributors
 
