@@ -1,19 +1,47 @@
-const loadKanbanBoard = (bootstrap,data,sortablejs) => {
+const escapeHtml = (value) => String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
+const loadKanbanBoard = (bootstrap, data, sortablejs) => {
     data = JSON.parse(data);
 
     return `
     <html>
         <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
             <link rel="stylesheet" href="${bootstrap}" />
             <script src="${sortablejs}"></script>
             <style>
-                .ghost {
-                    opacity: 0.4;
+                .ghost { opacity: 0.4; }
+                .header-container { margin-top: 10px; display: flex; }
+                .task-title { overflow-wrap: anywhere; }
+                .task-description-modal {
+                    display: none;
+                    position: fixed;
+                    inset: 0;
+                    z-index: 1000;
+                    padding: 24px;
+                    background: rgba(0, 0, 0, 0.55);
+                    align-items: center;
+                    justify-content: center;
                 }
-                .header-container {
-                    margin-top: 10px;
-                    display: flex;
+                .task-description-modal.is-open { display: flex; }
+                .task-description-dialog {
+                    width: min(520px, 100%);
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    padding: 20px;
+                    border-radius: 6px;
+                    background: var(--vscode-editor-background, #fff);
+                    color: var(--vscode-editor-foreground, #222);
+                    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
                 }
+                .task-description-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+                .task-actions { display: flex; gap: 8px; align-items: center; }
             </style>
         </head>
         <body>
@@ -22,263 +50,146 @@ const loadKanbanBoard = (bootstrap,data,sortablejs) => {
                     <center class="fs-2">Kanban Board</center>
                 </div>
                 <div class="col-2">
-                    <button type="button" class="btn btn-outline-success btn-lg" onclick="addTask();">+</button>
+                    <button type="button" class="btn btn-outline-success btn-lg" id="add-task">+</button>
                 </div>
             </div>
             <hr />
             <div class="container">
                 <div class="row row-cols-4">
                     <div id="todo-container" class="panel col-3">
-                        ${displayData(data.todo,"todo", "To Do")}
+                        ${displayData(data.todo || [], "todo", "To Do")}
                     </div>
                     <div id="in-progress-container" class="panel col-3">
-                        ${displayData(data.inprogress,"inprogress","In Progress")}
+                        ${displayData(data.inprogress || [], "inprogress", "In Progress")}
                     </div>
                     <div id="testing-container" class="panel col-3">
-                        ${displayData(data.testing,"testing", "Testing")}
+                        ${displayData(data.testing || [], "testing", "Testing")}
                     </div>
                     <div id="completed-container" class="panel col-3">
-                        ${displayData(data.completed,"completed","Completed")}
+                        ${displayData(data.completed || [], "completed", "Completed")}
                     </div>
                 </div>
+            </div>
+
+            <div id="task-description-modal" class="task-description-modal" aria-hidden="true">
+                <section class="task-description-dialog" role="dialog" aria-modal="true" aria-labelledby="task-description-title">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 id="task-description-title" class="h4 mb-0"></h2>
+                        <button type="button" class="btn-close" id="close-description" aria-label="Close"></button>
+                    </div>
+                    <p id="task-description-text" class="task-description-text mb-4"></p>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary" id="dismiss-description">Close</button>
+                    </div>
+                </section>
             </div>
 
             <script>
                 const vscode = acquireVsCodeApi();
 
-                function addTask() {
-                    vscode.postMessage({
-                        command: 'addTask'
+                document.getElementById('add-task').addEventListener('click', () => {
+                    vscode.postMessage({ command: 'addTask' });
+                });
+
+                function decodeTask(element) {
+                    return JSON.parse(decodeURIComponent(element.dataset.task));
+                }
+
+                function openDescription(task) {
+                    document.getElementById('task-description-title').textContent = task.name || 'Task';
+                    document.getElementById('task-description-text').textContent = task.description || 'No description provided.';
+                    const modal = document.getElementById('task-description-modal');
+                    modal.classList.add('is-open');
+                    modal.setAttribute('aria-hidden', 'false');
+                    document.getElementById('close-description').focus();
+                }
+
+                function closeDescription() {
+                    const modal = document.getElementById('task-description-modal');
+                    modal.classList.remove('is-open');
+                    modal.setAttribute('aria-hidden', 'true');
+                }
+
+                document.querySelectorAll('.task-title').forEach((element) => {
+                    element.addEventListener('click', () => openDescription(decodeTask(element)));
+                });
+
+                document.querySelectorAll('.edit-task').forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const task = decodeTask(button);
+                        vscode.postMessage({
+                            command: 'edit',
+                            text: { name: task.name, description: task.description, status: button.dataset.status }
+                        });
                     });
-                }
+                });
 
-                function deleteTask(name,key) {
-                    vscode.postMessage({
-                        command: 'delete',
-                        text: {
-                            name: name,
-                            key: key
-                        }
-                    })
-                }
-
-                function dataClicked(data, status) {
-                    console.log('Edit Data: ', data, status);
-                    vscode.postMessage({
-                        command: 'edit',
-                        text: {
-                            name: data.name,
-                            description: data.description,
-                            status: status
-                        }
-                    })
-                }
-
-                Sortable.create(todo,{
-                    group: {
-                        name: "kanban",
-                        pull: (to,from) => {
-                            console.log("From "+from.el.id+" to "+to.el.id);
-                        }
-                    },
-                    onEnd: function(event) {
-                        // console.log(event.to);
-                        // console.log(event.from);
-                        let from = event.from;
-                        let to = event.to;
-                        let fromId = from.id;
-                        let toId = to.id;
-
-                        let fromChildren = from.childNodes;
-                        let toChildren = to.childNodes;
-
-                        let fromArr = [];
-                        let toArr = [];
-
-                        for(let i=1;i<fromChildren.length;i++) {
-                            if(fromChildren[i].innerText != undefined)
-                                fromArr.push({"name":fromChildren[i].innerText});
-                        }
-                        for(let i=1;i<toChildren.length;i++) {
-                            if(toChildren[i].innerText != undefined)
-                                toArr.push({"name":toChildren[i].innerText});
-                        }
-                        
-
+                document.querySelectorAll('.delete-task').forEach((button) => {
+                    button.addEventListener('click', () => {
                         vscode.postMessage({
-                            command: 'changes',
-                            text: {
-                                fromId: fromId,
-                                toId: toId,
-                                from: fromArr,
-                                to: toArr
-                            }
-                        })
-                    },
-                    animation: 150,
-                    ghostClass: 'ghost'
-                })
-                Sortable.create(inprogress,{
-                    group: {
-                        name: "kanban",
-                        pull: (to,from) => {
-                            console.log("From "+from.el.id+" to "+to.el.id);
-                        }       
-                    },
-                    onEnd: function(event) {
-                        // console.log(event.to);
-                        // console.log(event.from);
-                        let from = event.from;
-                        let to = event.to;
-                        let fromId = from.id;
-                        let toId = to.id;
+                            command: 'delete',
+                            text: { name: button.dataset.name, key: button.dataset.key }
+                        });
+                    });
+                });
 
-                        let fromChildren = from.childNodes;
-                        let toChildren = to.childNodes;
+                document.getElementById('close-description').addEventListener('click', closeDescription);
+                document.getElementById('dismiss-description').addEventListener('click', closeDescription);
+                document.getElementById('task-description-modal').addEventListener('click', (event) => {
+                    if (event.target.id === 'task-description-modal') closeDescription();
+                });
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') closeDescription();
+                });
 
-                        console.log(fromChildren);
-                        console.log(toChildren);
-
-                        let fromArr = [];
-                        let toArr = [];
-
-                        for(let i=1;i<fromChildren.length;i++) {
-                            if(fromChildren[i].innerText != undefined)
-                                fromArr.push({"name":fromChildren[i].innerText});
+                ['todo', 'inprogress', 'testing', 'completed'].forEach((listId) => {
+                    Sortable.create(document.getElementById(listId), {
+                        group: { name: 'kanban' },
+                        animation: 150,
+                        ghostClass: 'ghost',
+                        onEnd: (event) => {
+                            const readTasks = (list) => Array.from(list.querySelectorAll('li[data-task]')).map(decodeTask);
+                            vscode.postMessage({
+                                command: 'changes',
+                                text: {
+                                    fromId: event.from.id,
+                                    toId: event.to.id,
+                                    from: readTasks(event.from),
+                                    to: readTasks(event.to)
+                                }
+                            });
                         }
-                        for(let i=1;i<toChildren.length;i++) {
-                            if(toChildren[i].innerText != undefined)
-                                toArr.push({"name":toChildren[i].innerText});
-                        }
-                        vscode.postMessage({
-                            command: 'changes',
-                            text: {
-                                fromId: fromId,
-                                toId: toId,
-                                from: fromArr,
-                                to: toArr
-                            }
-                        })
-                    },
-                    animation: 150,
-                    ghostClass: 'ghost'
-                })
-                Sortable.create(testing,{
-                    group: {
-                        name: "kanban",
-                        pull: function (to,from) {
-                            console.log("From "+from.el.id+" to "+to.el.id);
-                        }                        
-                    },
-                    onEnd: function(event) {
-                        // console.log(event.to);
-                        // console.log(event.from);
-                        let from = event.from;
-                        let to = event.to;
-                        let fromId = from.id;
-                        let toId = to.id;
-
-                        let fromChildren = from.childNodes;
-                        let toChildren = to.childNodes;
-
-                        let fromArr = [];
-                        let toArr = [];
-
-                        for(let i=1;i<fromChildren.length;i++) {
-                            if(fromChildren[i].innerText != undefined)
-                                fromArr.push({"name":fromChildren[i].innerText});
-                        }
-                        for(let i=1;i<toChildren.length;i++) {
-                            if(toChildren[i].innerText != undefined)
-                                toArr.push({"name":toChildren[i].innerText});
-                        }
-
-
-                        vscode.postMessage({
-                            command: 'changes',
-                            text: {
-                                fromId: fromId,
-                                toId: toId,
-                                from: fromArr,
-                                to: toArr
-                            }
-                        })
-                    },
-                    animation: 150,
-                    ghostClass: 'ghost'
-                })
-                Sortable.create(completed,{
-                    group: {
-                        name: "kanban",
-                        pull: function (from, to) {
-                            console.log("From "+from.el.id+" to "+to.el.id);
-                        }
-                    },
-                    onEnd: function(event) {
-                        // console.log(event.to);
-                        // console.log(event.from);
-                        let from = event.from;
-                        let to = event.to;
-                        let fromId = from.id;
-                        let toId = to.id;
-
-                        let fromChildren = from.childNodes;
-                        let toChildren = to.childNodes;
-
-                        let fromArr = [];
-                        let toArr = [];
-
-                        for(let i=1;i<fromChildren.length;i++) {
-                            if(fromChildren[i].innerText != undefined)
-                                fromArr.push({"name":fromChildren[i].innerText});
-                        }
-                        for(let i=1;i<toChildren.length;i++) {
-                            if(toChildren[i].innerText != undefined)
-                                toArr.push({"name":toChildren[i].innerText});
-                        }
-
-                        vscode.postMessage({
-                            command: 'changes',
-                            text: {
-                                fromId: fromId,
-                                toId: toId,
-                                from: fromArr,
-                                to: toArr
-                            }
-                        })
-                    },
-                    animation: 150,
-                    ghostClass: 'ghost'
-                })
+                    });
+                });
             </script>
         </body>
     </html>
     `;
 };
 
-const displayData = (data,key,name) => {
-    let res=`
-            <div class="card">
-                <div class="card-header">
-                    ${name}
+const displayData = (data, key, name) => {
+    let res = `
+        <div class="card">
+            <div class="card-header">${escapeHtml(name)}</div>
+            <ul id="${key}" class="list-group">
+    `;
+    for (let i = 0; i < data.length; i++) {
+        const task = data[i] || {};
+        const encodedTask = escapeHtml(encodeURIComponent(JSON.stringify(task)));
+        res += `
+            <li class="list-group-item d-flex justify-content-between align-items-center" data-task="${encodedTask}">
+                <button type="button" class="btn btn-link task-title text-start p-0" data-task="${encodedTask}">${escapeHtml(task.name || '')}</button>
+                <div class="task-actions">
+                    <button type="button" class="btn btn-outline-secondary edit-task" data-task="${encodedTask}" data-status="${escapeHtml(name)}" aria-label="Edit ${escapeHtml(task.name || 'task')}" title="Edit task">Edit</button>
+                    <button type="button" class="btn btn-outline-danger delete-task" data-name="${escapeHtml(task.name || '')}" data-key="${key}" aria-label="Delete ${escapeHtml(task.name || 'task')}" title="Delete task">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M2.5 1a1 1 0 0 1 1-1H6a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1h1v1H3V2h1a1 1 0 0 1 1-1h2zM4 4h8l-.6 10.2A2 2 0 0 1 9.4 16H6.6a2 2 0 0 1-2-1.8L4 4z"/>
+                        </svg>
+                    </button>
                 </div>
-                <ul id="${key}" class="list-group">
-            `;
-    for(let i=0;i<data.length;i++) {
-        res+=`
-        <li class="list-group-item d-flex justify-content-between align-items-center" style="cursor: pointer;">
-            <div>
-                <div onclick='dataClicked(${JSON.stringify(data[i])}, "${name}");'>${data[i].name}</div>
-            <div>
-            <button type="button" class="btn btn-outline-danger" onclick="deleteTask('${data[i].name}','${key}');" style="float: right;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
-                </svg>
-            </button>
-        </li>`;
+            </li>`;
     }
-    res+=`</ul></div>`;
-
+    res += `</ul></div>`;
     return res;
 };
 

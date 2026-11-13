@@ -155,7 +155,8 @@ export function activate(context: vscode.ExtensionContext) {
 								});
 							});
 						}	
-					);				
+					);
+					return;
 					case 'delete':
 						console.log('Delete api event Click!');
 						fs.readFile(jsonPath,"utf8",async (err:any,data:any) => {
@@ -220,7 +221,7 @@ export function activate(context: vscode.ExtensionContext) {
 							});
 						}	
 					);
-						
+					return;
 				}
 		});
 	});
